@@ -1,18 +1,16 @@
+import './index.css';
+
 import { ThemeProvider } from 'context/styles/ThemeContext';
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-const Main = () => {
+import App from './App';
 
-  return (
-    <React.StrictMode>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </React.StrictMode>
-  );
-};
-
-ReactDOM.createRoot(document.getElementById('root')!).render(<Main />)
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+ReactDOM.createRoot(document.getElementById('root')!).render(
+	<React.StrictMode>
+		<ThemeProvider>
+			<App />
+		</ThemeProvider>
+	</React.StrictMode>,
+);
