@@ -1,3 +1,4 @@
+import { Theme } from '@emotion/react';
 import { PaletteMode } from '@mui/material';
 import { deepPurple, green } from '@mui/material/colors';
 import { createTheme, PaletteOptions } from '@mui/material/styles';
@@ -50,7 +51,7 @@ const palette: PaletteOptions = {
 const basicTheme = createTheme();
 
 // Create a theme instance.
-const getTheme = (mode: PaletteMode) =>
+const getTheme = (mode: PaletteMode): Theme =>
 	createTheme({
 		palette: {
 			...basicTheme.palette,

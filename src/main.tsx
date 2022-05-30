@@ -1,5 +1,3 @@
-import './index.css';
-
 import { ThemeProvider } from 'context/styles/ThemeContext';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
