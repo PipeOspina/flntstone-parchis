@@ -1,29 +1,33 @@
-import { Box, Button, Typography } from '@mui/material';
 import AuthContext from 'context/auth/AuthContext';
-import { FC, useContext } from 'react';
+import { FC, ReactNode, useContext, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { routes } from 'routes/routes';
 
-const App: FC = () => {
-	const { signIn, user, signOut, loading } = useContext(AuthContext);
+export interface AppProps {
+	children?: ReactNode;
+}
 
-	return (
-		<Box
-			width="100vw"
-			height="100vh"
-			display="flex"
-			alignItems="center"
-			justifyContent="center"
-			flexDirection="column"
-		>
-			<Typography variant="h1">Flintstone Parchis 🎲</Typography>
-			<Button
-				onClick={() => (user ? signOut && signOut() : signIn && signIn('anonymous'))}
-			>
-				Anonymous
-			</Button>
-			{loading && 'cargando...'}
-			{user?.isAnonymous ? 'anonimo' : 'nope'}
-		</Box>
-	);
+const App: FC<AppProps> = ({ children }) => {
+	const { user, signOut } = useContext(AuthContext);
+	const location = useLocation();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		const route = routes[0].children
+			?.filter(({ path }) => path !== 'logout')
+			.find(({ path }) => path && location.pathname.includes(path));
+
+		if (!user && !route) {
+			navigate('/');
+		}
+
+		if (location.pathname === '/logout' && signOut) {
+			signOut();
+			navigate('/');
+		}
+	}, [user, location.pathname]);
+
+	return <>{children}</>;
 };
 
 export default App;
