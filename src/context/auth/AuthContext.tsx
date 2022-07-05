@@ -1,4 +1,5 @@
 import { auth, googleProvider } from 'cloud/firebase/auth';
+import { AuthLoading } from 'context/loading/LoadingModules';
 import { BaseProviderProps } from 'context/props';
 import {
 	onAuthStateChanged,
@@ -9,7 +10,7 @@ import {
 	updateProfile,
 	User,
 } from 'firebase/auth';
-import { useLoading, UseLoadingState } from 'hooks/useLoading';
+import { useLoading } from 'hooks/useLoading';
 import { createContext, FC, useEffect, useState } from 'react';
 
 export type SignInMethod = 'google' | 'email' | 'anonymous';
@@ -25,24 +26,17 @@ export interface AuthContextState {
 	user?: User | null;
 	signOut?: () => void;
 	updateUsername?: (username: string) => void;
-	loadingState?: UseLoadingState<AuthContextLoading>;
+	loadingState?: AuthLoading;
 }
-
-type AuthContextLoading = 'signIn' | 'signOut' | 'updateUsername' | 'stateChanges';
 
 const AuthContext = createContext<AuthContextState>({});
 
 export const AuthProvider: FC<BaseProviderProps> = ({ children }) => {
 	const [user, setUser] = useState<User | null>(null);
 
-	const { loading, setLoading, loadingState } = useLoading<AuthContextLoading>({
-		signIn: false,
-		signOut: false,
-		updateUsername: false,
-		stateChanges: false,
-	});
+	const { loading, setLoading, loadingState } = useLoading('auth');
 
-	const setNoLoading = (key: AuthContextLoading) => () => setLoading(key, false);
+	const setNoLoading = (key: keyof AuthLoading) => () => setLoading(key, false);
 
 	const updateUsername = (username: string) => {
 		if (auth.currentUser) {
